@@ -29,6 +29,7 @@
 
 &start`flag`build [u(cobj,start)]=@flag Marker0=BUILD;@flagdef/set BUILD=Architect;@flagdef/unset build=Architect;@flagdef/see build=mortal
 &start`function`isinstalled [u(cobj,start)]=@function/privileged isinstalled=[u(cobj,bbk)]/isinstalled
+&start`function`hasmodule [u(cobj,start)]=@function/privileged hasmodule=[u(cobj,bbk)]/hasmodule
 &start`config`07 [u(cobj,start)]=@admin global_parent_room=[after([u(gconfig,%!,GP_room)],#)]
 &start`config`06 [u(cobj,start)]=@admin global_parent_exit=[after([u(gconfig,%!,GP_exit)],#)]
 &start`config`05 [u(cobj,start)]=@admin global_parent_player=[after([u(gconfig,%!,GP_player)],#)]
@@ -110,9 +111,10 @@
 
 &hastag bbk=[u(gtm,[get(%0/%vt`tags)],[ucstr(%1)])]
 
-&playerid bbk=[setr(t1,[objid(u(strfirstof,%0,%#))])]
+&playerid bbk=[setr(p1,[objid(u(strfirstof,%0,%#))])]
 &accid bbk=[setr(a1,[get(%0/%vt`account_db)])]
-&getid bbk=[setr(id,[if([u(installed,ACCOUNT)],[u(accid,%0)],[u(playerid,%0)])])]
+&getid bbk=[setq(work,[switch(type(%0),THING,%0,PLAYER,[if(u(installed,AMS),[u(accid,%0)],[u(playerid,%0)])])])][setr(id,%q<work>)]
+
 &installed bbk=[gtm([gameconfig(#1,SYSTEMS)],%0,|)]
 
 
@@ -144,6 +146,7 @@
 &run`install [u(cobj,bbk)]=th [setq(slist,[u(get_config,%#,SYSTEMS)])];&config`SYSTEMS`custom [u(Cobj,gcs)]=[setunion(%q<slist>,[ucstr(%0)],|)]
 
 &isinstalled [u(cobj,bbk)]=[gtm([u(gconfig,%!,systems)],[ucstr(%0)],|)]
+&hasmodule [u(cobj,bbk)]=[setq(sys,[u(cobj,%0)])][gtm([u(%q<sys>/modules)],[ucstr(%1)],|)]
 
 &SYSTEM`DESC BBK=The basic core systems for the game. This includes basic functions, help & info systems, game configuration options and core permission adjustments.
 @fo me=&install`core [u(cobj,bbk)]=[objid(BBK)]

@@ -18,7 +18,6 @@
 &shlp`validators [u(Cobj,core)]=%TThis is a list of the validators used by the system to check to make sure a configuration is value is actually acceptable.%r%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],COLOR)] - It looks for ansi names such as +red\, to set.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],INT)] - It looks for a number that is 0 or greater. Such as 1.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],WORD)] - It looks for any word\, character\, number or anything similar.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],LIST)] - It looks for a list of items separated by | only.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],BOOL)] - It looks for either a 1 %(For True%) or 0 %(For False%).)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],DBREF)] - It looks for only a DBREF from the MUSH. Such as #2.)]
 
 
-
 +shelp/add Technical/+gameconfig=[u(cobj,core)]/shlp`gameconfig
 +shelp/addsub +gameconfig/Validators=[u(cobj,core)]/shlp`validators
 +shelp/add Technical/+install=[u(cobj,core)]/shlp`install

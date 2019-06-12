@@ -124,7 +124,7 @@ th [u(newconfig,USE_RULES,CORE,SYSTEM,1,BOOL,Enable the Use of the +rules system
 
 &sort`filename`clean [u(Cobj,help)]=[if(strmatch(%0,+*),ZZZZZZZ%0,%0)]
 
-&run`index [u(Cobj,help)]=@attach %!/init`%q<sys>;@pemit %#=[line([u(gconfig,%#,Game_Name)] - [u(%q<db>/system`name)] Files,%#,Header)];@dolist/delimit/inline | {[u(get_categories,%q<db>)]}={@pemit %#=[line([caps(##)],%#,cathead)][step(run`index`step,[u(get_files,[setr(t1,%#)],##,%q<sys>)],2,|,)]};@pemit %#=[line(,%#)]%R[align(5 [sub([u(gconfig,%#,Width)],6)],,For more information on the listed topics\, please use '[ansi([u(gconfig,%#,line_text)],[u(%q<db>/system`name)] <topic>)]')][if([u(isadmin,%#)],%R[align(5 [sub([u(gconfig,%#,Width)],6)],,Admin[chr(44)] please see [ansi([u(gconfig,%#,line_text)],[u(%q<db>/system`name)]/help)] for config information.)])]%R[line(,%#)]
+&run`index [u(Cobj,help)]=@attach %!/init`%q<sys>;@pemit %#=[line([u(gconfig,%#,Game_Name)] - [u(%q<db>/system`name)] Files,%#,Header)];@dolist/delimit/inline | {[u(get_categories,%q<db>)]}={@pemit %#=[line([caps(##)],%#,cathead)][step(run`index`step,[u(get_files,[setr(t1,[getid(%#)])],##,%q<sys>)],2,|,)]};@pemit %#=[line(,%#)]%R[align(5 [sub([u(gconfig,%#,Width)],6)],,For more information on the listed topics\, please use '[ansi([u(gconfig,%#,line_text)],[u(%q<db>/system`name)] <topic>)]')][if([u(isadmin,%#)],%R[align(5 [sub([u(gconfig,%#,Width)],6)],,Admin[chr(44)] please see [ansi([u(gconfig,%#,line_text)],[u(%q<db>/system`name)]/help)] for config information.)])]%R[line(,%#)]
 &run`index`step [u(cobj,help)]=%R[u(run`index`fmt,%q<t1>,%q<db>,%0)]%B%B[u(run`index`fmt,%q<t1>,%q<db>,%1)]
 &run`index`fmt [u(cobj,help)]=[if([gte([words(%2)],1)],[align(26 >[sub([div([sub([u(gconfig,%#,width)],2)],2)],27)],[ansi([u(gconfig,%q<t1>,LINE_TEXT)],[get(%1/file`%2)])],[u(get_unread,%q<t1>,%2,[get(%q<db>/root`%2)])][timefmt($M/$D/$Y,[get(%q<db>/file`%2`update)])])])]
 
@@ -146,7 +146,7 @@ th [u(newconfig,USE_RULES,CORE,SYSTEM,1,BOOL,Enable the Use of the +rules system
 
 &template`subfile [u(cobj,help)]=@pemit %#=[if([strmatch([setr(dbref,[get(%q<db>/file`%q<sid>`body)])],#*/*)],[u(%q<dbref>)],[get(%q<db>/file`%q<sid>`body)])]
 &template`file [u(cobj,help)]=@pemit %#=[if([strmatch([setr(dbref,[get(%q<db>/file`%q<tid>`body)])],#*/*)],[u(%q<dbref>)],[get(%q<db>/file`%q<tid>`body)])][if([hasattr(%q<db>,ROOT`%q<tid>)],[u(template`file`sub,%q<db>,%q<tid>)])]
-&template`file`sub [u(Cobj,help)]=%R[line(Sub-Topics,%#)]%R[align(5 [sub([u(gconfig,%#,Width)],6)],,To read subfiles[chr(44)] use '[ansi([u(gconfig,%#,line_text)],[u(%q<db>/system`name)] %q<topic>/<topic>)]')][step(run`index`step`sub,[setq(t1,%#)][u(get_files`sub,%q<db>,%q<tid>)],2,|,)]
+&template`file`sub [u(Cobj,help)]=%R[line(Sub-Topics,%#)]%R[align(5 [sub([u(gconfig,%#,Width)],6)],,To read subfiles[chr(44)] use '[ansi([u(gconfig,%#,line_text)],[u(%q<db>/system`name)] %q<topic>/<topic>)]')][step(run`index`step`sub,[setq(t1,[getid(%#)])][u(get_files`sub,%q<db>,%q<tid>)],2,|,)]
 &run`index`step`sub [u(cobj,help)]=%R[u(run`index`fmt`sub,%q<t1>,%q<db>,%0)]%B%B[u(run`index`fmt`sub,%q<t1>,%q<db>,%1)]
 &run`index`fmt`sub [u(cobj,help)]=[if([gte([words(%2)],1)],[align(26 >[sub([div([sub([u(gconfig,%#,width)],2)],2)],27)],[ansi([u(gconfig,%q<t1>,LINE_TEXT)],[get(%1/file`%2)])],[u(get_unread,%q<t1>,%2)][timefmt($M/$D/$Y,[get(%q<db>/file`%2`update)])])])]
 
@@ -154,7 +154,7 @@ th [u(newconfig,USE_RULES,CORE,SYSTEM,1,BOOL,Enable the Use of the +rules system
 
 &get_unread`nums [u(cobj,help)]=[iter(%0,[first(##,~)],|,|)]
 
-&fil`is_unread [u(Cobj,help)]=[if([gtm([setr(read,[get([getid(%q<t1>)]/[u(VT)]`read`%q<sys>)])],%0~*,|)],[gt([get(%q<db>/file`%0`update)],[last([grab(%q<read>,%0~*,|)],~)])],1)]
+&fil`is_unread [u(Cobj,help)]=[if([gtm([setr(read,[get(%q<t1>/[u(VT)]`read`%q<sys>)])],%0~*,|)],[gt([get(%q<db>/file`%0`update)],[last([grab(%q<read>,%0~*,|)],~)])],1)]
 
 
 &get_unread`sub [u(Cobj,help)]=[if([gtm([words([iter(%0,[filter(fil`is_unread,##,|)],|,|)],|)],1)],[ansi([u(gconfig,%q<t1>,line_accent)],*)])]
