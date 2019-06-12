@@ -1,0 +1,9 @@
+@set me=SIDEFX COMMANDS
+@admin command_quota_max=10000
+@admin command_quota_increment=100
+@parent me=BBK
+
+@dig/tel Master Room
+@set here=dark unfindable cloak scloak floating
+@fo me=&cobj`master_room bbk=[objid(%L)]
+@fo me=&cobj`Codewiz BBK=[objid(%#)]
