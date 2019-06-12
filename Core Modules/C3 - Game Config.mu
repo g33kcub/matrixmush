@@ -7,8 +7,8 @@
 &newconfig [u(cobj,bbk)]=[setq(idb,[u(strfirstof,[u(cobj,%1)],[u(cobj,gcs)])])][set(%q<idb>,SYSTEM`CONFIGS:[setunion([u(%q<idb>/SYSTEM`configs)],[ucstr(%0)])])][set([u(cobj,gcs)],CONFIG`%0`TYPE:[ucstr(%2)],1)][set([u(cobj,gcs)],CONFIG`%0`DEFAULT:%3,1)][set([u(cobj,gcs)],CONFIG`%0`VALID:[ucstr(%4)],1)][set([u(cobj,gcs)],CONFIG`%0:{%5},1)][set([u(Cobj,gcs)],CONFIG`%0`PLAYER:[u(strfirstof,%6,0)])][pemit(%#,Done: %0)]
 &newconfcat [u(cobj,bbk)]=[set([u(cobj,gcs)],CONFIG`TYPES:[setunion([u([u(cobj,gcs)]/config`types)],[ucstr(%0)],|)])][pemit(%#,Done: %0)]
 
-&get_config [u(Cobj,core)]=[u(get_config`[if(gtm(LIST|TYPE|TYPES,%0,|),%0,def)],%0,%1,%2,%3,%4,%5,%6,%7,%8,%9)]
-&get_config`def [u(cobj,core)]=[u(strfirstof,[get([u(getid,%0)]/config`%1`custom)],[get([u(cobj,gcs)]/config`%1`custom)],[get([u(cobj,gcs)]/config`%1`default)])]
+&get_config [u(Cobj,core)]=[u([u(cobj,core)]/get_config`[if(gtm(LIST|TYPE|TYPES,%0,|),%0,def)],%0,%1,%2,%3,%4,%5,%6,%7,%8,%9)]
+&get_config`def [u(cobj,core)]=[firstof([get([getid(%0)]/config`%1`custom)],[get([u(cobj,gcs)]/config`%1`custom)],[get([u(cobj,gcs)]/config`%1`default)])]
 &get_config`list [u(cobj,core)]=[setunion([iter(lattr([u(cobj,bbk)]/install`*,,,,,1),[get([get([u(cobj,bbk)]/##)]/system`configs)])],[get([u(cobj,gcs)]/system`configs)])]
 &get_config`type [u(Cobj,core)]=[sort([iter([u(get_config`list)],[if(gtm([get([u(cobj,gcs)]/config`##`type)],%1,|),##)])])]
 &get_config`types [u(cobj,core)]=[setq(types,[iter([u(get_config`list)],[get([u(cobj,gcs)]/config`##`type)],%B,|)])][setunion(%q<types>,%q<types>,|)]
@@ -29,11 +29,15 @@
 
 &run`config`view [u(cobj,bbk)]=@pemit %#=[line([caps([u(system`name)])] Configuration,%#,header)]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Name)]:,%q<config>)]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Category)]:,[itemize([get([u(cobj,gcs)]/config`%q<config>`type)],&)] %([if([default([u(cobj,gcs)]/config`%q<config>`player,0)],[ansi([u(get_config,%#,line_accent)],Player Settable)],Staff Only)]%))]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Default)]:,[get([u(cobj,gcs)]/config`%q<config>`default)])]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Validator Type)]:,[get([u(cobj,gcs)]/config`%q<config>`valid)])]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Current)]:,[u(display`config`value,%#,%q<config>)])]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Description)]:,[get([u(cobj,gcs)]/config`%q<config>)])]%R[line(,%#)]
 
-&display`config`value [u(Cobj,bbk)]=[setq(lkr,[if([default([u(cobj,gcs)]/config`%1`player,0)],[getid(%0)],[u(cobj,gcs)])])][u(display`config`[get([u(cobj,gcs)]/config`%1`type)],%q<lkr>,[u(%q<lkr>/config`%1`[if(hasattr(%q<lkr>,config`%1`custom),custom,default)])])]
+&display`config`value [u(Cobj,bbk)]=[u(display`config`[get([u(cobj,gcs)]/config`%1`valid)],[u(get_config,%0,%1)])]
 
 
-
-&display`config`color [u(cobj,bbk)]=[ansi(%1,%1)]
+&display`config`color [u(cobj,bbk)]=[ansi(%0,%0)]
+&display`config`int [u(Cobj,bbk)]=%0
+&display`config`word [u(Cobj,bbk)]=%0
+&display`config`list [u(Cobj,bbk)]=[itemize(%0,|,&)] %(%0%)
+&display`config`bool [u(Cobj,bbk)]=[if(%0,True %(1%),False %(0%))]
+&display`config`dbref [u(cobj,bbk)]=[cname(%0)] %(%0%)
 
 
 &validator`color [u(cobj,bbk)]=@stop [strmatch([valid(colorname,[setr(value,%0)])],#-*)]={@attach %!/msg`error={'%q<value>' is not a valid color.}}

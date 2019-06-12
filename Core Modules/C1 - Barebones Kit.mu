@@ -118,7 +118,7 @@
 &installed bbk=[gtm([gameconfig(#1,SYSTEMS)],%0,|)]
 
 
-&gameconfig bbk=[u([u(cobj,core)]/get_config,%0,%1,%2,%3,%4,%5,%6,%7,%8,%9)]
+&gameconfig bbk=[u([cobj(core)]/get_config,%0,%1,%2,%3,%4,%5,%6,%7,%8,%9)]
 &gconfig bbk=[u(gameconfig,%0,%1,%2,%3,%4,%5,%6,%7,%8,%9)]
 
 &staffrank bbk=[switch([bittype(%0)],6,[ansi([u(gconfig,%:,RANK_COLOR_OPS)],Ops)],5,[ansi([u(gconfig,%:,RANK_COLOR_WIZ)],Wiz)],4,[ansi([u(gconfig,%:,RANK_COLOR_ADM)],Adm)],3,[ansi([u(gconfig,%:,RANK_COLOR_BLD)],Bld)],2,[ansi([u(gconfig,%:,RANK_COLOR_STF)],STF)])]

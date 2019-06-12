@@ -19,4 +19,4 @@
 
 &run`pconfig`set [u(cobj,bbk)]=@attach %!/run`partial=%0,sort(u(get_pconfig`list)),%B,op,Option;@attach %!/validator`[get([u(cobj,gcs)]/config`%q<op>`valid)]=%1;&config`%q<op>`custom [getid(%#)]=%q<value>;@attach %!/msg={You set the config option '%q<op>' to: %q<value>}
 
-&run`pconfig`clear [u(cobj,bbk)]=@attach %!/run`partial=%0,sort(u(get_pconfig`list)),%B,op,Option;&config`%q<op>`custom [getid(%#)];@attach %!/msg={You clear the config option '%q<op>'.}
+&run`pconfig`clear [u(cobj,bbk)]=@check [gte(words(%0),1)]={@attach %!/msg`error={You must provide a value to clear.}};@attach %!/run`partial=%0,sort(u(get_pconfig`list)),%B,op,Option;&config`%q<op>`custom [getid(%#)];@attach %!/msg={You clear the config option '%q<op>'.}
