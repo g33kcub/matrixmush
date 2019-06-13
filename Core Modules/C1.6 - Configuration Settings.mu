@@ -4,6 +4,7 @@ th [u(newconfcat,ROOT)]
 th [u(newconfcat,COSMETIC)]
 
 @@ [u(newconfig,CONFIG NAME,SYSTEM MONIKER,CONFIG CATEGORY,DEFAULT,VALIDATOR,DESCRIP,PLAYER)]
+th [u(newconfig,SYSTEM_TIMEZONE,CORE,SYSTEM,EST,TZ,This is the default system timezone.)]
 th [u(newconfig,SYSTEM_ATTRIBUTE,CORE,ROOT,MYSYS,WORD,The attribute tree that is used to setup system permissions and data.)]
 th [u(newconfig,SYSTEMS,CORE,ROOT,CORE,LIST,This is a list of which systems are installed or not. Do not edit manually.)]
 th [u(newconfig,ALERT_TEXT,CORE,COSMETIC,+white,COLOR,This is the color used for the text in OOC & Messages.,1)]

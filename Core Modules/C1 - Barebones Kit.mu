@@ -22,7 +22,8 @@
 &msg`header [u(Cobj,bbk)]=localize(ansi(u(setr,msgcolor,u(gconfig,u(firstof,%1,%#),ALERT_FRAME)),[chr(91)])[ansi(u(gconfig,u(firstof,%1,%#),ALERT_TEXT),ucstr(%0))][ansi(%q<msgcolor>,[chr(93)])])
 &msg`chan [u(cobj,bbk)]=@check [gtm([u(gconfig,%#,SYSTEMS)],COMSYS,|)];
 
-
+&script`uninstall [u(cobj,bbk)]=@set me=!COMMANDS;@dolist/delimit | {[u(help`uninstall)]}={+help/delete ##};@dolist/delimit | {[u(shelp`uninstall)]}={+shelp/delete ##}
+&script`install [u(cobj,bbk)]=@dolist/delimit | {[u(help`install`main)]}={+help/add ##};@dolist/delimit | {[u(help`install`sub)]}={+help/addsub ##};@dolist/delimit | {[u(shelp`install`main)]}={+shelp/add ##};@dolist/delimit | {[u(shelp`install`sub)]}={+shelp/addsub ##}
 
 @@ Startup System (START)
 @startup start=@dolist [lattr(%!/start`**)]=@attach [u(cobj,start)]/##
@@ -33,7 +34,6 @@
 &start`config`07 [u(cobj,start)]=@admin global_parent_room=[after([u(gconfig,%!,GP_room)],#)]
 &start`config`06 [u(cobj,start)]=@admin global_parent_exit=[after([u(gconfig,%!,GP_exit)],#)]
 &start`config`05 [u(cobj,start)]=@admin global_parent_player=[after([u(gconfig,%!,GP_player)],#)]
-&start`run`vt [u(Cobj,start)]=@VT [u(Cobj,bbk)]=[u(gconfig,%!,SYSTEM_ATTRIBUTE)]
 &start`function`cobj [u(cobj,start)]=@function/privileged cobj=[u(cobj,bbk)]/cobj
 &start`function`strfirstof [u(cobj,start)]=@function/privileged strfirstof=[u(cobj,bbk)]/strfirstof
 &start`function`line [u(cobj,start)]=@function/privileged line=[u(cobj,bbk)]/line
@@ -55,6 +55,7 @@
 &start`function`alignfilter [u(cobj,start)]=@function/privileged alignfilter=[u(cobj,bbk)]/alignfilter
 &start`function`itemize [u(cobj,start)]=@function/privileged/preserve itemize=[u(cobj,bbk)]/itemize
 &start`function`getid [u(cobj,start)]=@function/privileged getid=[u(cobj,bbk)]/getid
+&start`run`vt [u(Cobj,start)]=@VT [u(Cobj,bbk)]=[u(firstof,[u([u(cobj,gcs)]/config`system_attribute`custom)],[u([u(cobj,gcs)]/config`system_attribute`default)])]
 &start`config`04 [u(Cobj,start)]=@admin function_recursion_limit=100
 &start`config`03 [u(Cobj,start)]=@admin penn_setq=yes
 &start`alias`select [u(Cobj,start)]=@admin alias=@select @switch/first
@@ -113,7 +114,9 @@
 
 &playerid bbk=[setr(p1,[objid(u(strfirstof,%0,%#))])]
 &accid bbk=[setr(a1,[get(%0/%vt`account_db)])]
-&getid bbk=[setq(work,[switch(type(%0),THING,%0,PLAYER,[if(u(installed,AMS),[u(accid,%0)],[u(playerid,%0)])])])][setr(id,%q<work>)]
+&getid bbk=[setr(id,[u([u(cobj,core)]/get_id,%0,%1)])]
+
+
 
 &installed bbk=[gtm([gameconfig(#1,SYSTEMS)],%0,|)]
 
