@@ -56,7 +56,7 @@
 
 &run`config`view [u(cobj,bbk)]=@pemit %#=[line([caps([u(system`name)])] Configuration,%#,header)]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Name)]:,%q<config>)]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Category)]:,[itemize([get([u(cobj,gcs)]/config`%q<config>`type)],&)] %([if([default([u(cobj,gcs)]/config`%q<config>`player,0)],[ansi([u(get_config,%#,line_accent)],Player Settable)],Staff Only)]%))]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Default)]:,[get([u(cobj,gcs)]/config`%q<config>`default)])]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Validator Type)]:,[get([u(cobj,gcs)]/config`%q<config>`valid)])]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Current)]:,[u(display`config`value,%#,%q<config>)])]%R[align(25 [sub(80,26)],[ansi([u(get_config,%#,line_text)],Config Description)]:,[get([u(cobj,gcs)]/config`%q<config>)])]%R[line(,%#)]
 
-&display`config`value [u(Cobj,bbk)]=[u(display`config`[get([u(cobj,gcs)]/config`%1`valid)],[u(get_config,%0,%1)])]
+&display`config`value [u(Cobj,bbk)]=[if([gte(words([setr(dconf,[u(get_config,%0,%1)])]),1)],[u(display`config`[get([u(cobj,gcs)]/config`%1`valid)],%q<dconf>)],)]
 
 &display`config`email [u(cobj,bbk)]=%0
 &display`config`color [u(cobj,bbk)]=[ansi(%0,%0)]

@@ -23,12 +23,13 @@ th [u(newconfig,MANAGE_ACCOUNT,AMS,ACCOUNT,0,BOOL,Allow all members of account t
 th [u(newconfig,MASTER_CHARACTER,AMS,ACCOUNT,,DBREF,The character listed as the account owner. Typically this is the character that uses +account/new.,1)]
 th [u(newconfig,TIMEZONE,AMS,ACCOUNT,,TZ,This is the timezone the account belongs to.,1)]
 th [u(newconfig,ACCOUNT_ONLY,AMS,ACCOUNT,MANAGE_ACCOUNT|ACCOUNT_PREFS|MASTER_CHARACTER,List,A list of settings that MUST be set on the account object only.)]
+th [u(newconfig,MAX_PER_PAGE,AMS,ACCOUNT,20,INT,The maximum amount of accounts to show on the list for the +account/list command. %(Staff Only%),1)]
 
 &system`name ams=ACCOUNT
 &system`desc ams=This system setups and manages player accounts.
 
-&switches`player [u(cobj,ams)]=RENAME|NEW|REQUEST|REQLIST|APPROVE|CHANGEPASSWORD|RESETPASSWORD|DENY
-&switches`admin [u(cobj,ams)]=FREEZE|JAIL
+&switches`player [u(cobj,ams)]=RENAME|NEW|REQUEST|REQLIST|APPROVE|DENY
+&switches`admin [u(cobj,ams)]=FREEZE|JAIL|LIST|RELEASE
 
 
 @@ %0 = +account/switch SET1=Set2/Set3/set4/set5/set6/set7/set8
@@ -58,7 +59,30 @@ th [u(newconfig,ACCOUNT_ONLY,AMS,ACCOUNT,MANAGE_ACCOUNT|ACCOUNT_PREFS|MASTER_CHA
 @@ %8 =
 @@ %9 =
 
-&run`reqlist [u(cobj,ams)]=@check [hasattr(%#,%VT`account_DB)]={@attach %!/msg`error={You are not part of a game account.}};@pemit %#=[line([gameconfig(%#,Game_name)] - Account Request List,%#,Header)]%R[printf($-30:.:s $-20:.:s,[ansi(gameconfig(%#,COLUMN_NAMES),Name)],[ansi(gameconfig(%#,COLUMN_NAMES),Request Date)])]%R[iter([lattr([setr(adb,[u(accid,%#)])]/%vt`request`*)],[printf($-30:.:s $-20:.:s,[name([get(%q<adb>/##)])],,)],%B,%R)]
+&run`release [u(cobj,ams)]=@attach %!/run`getpc=%0,1;th [setq(pid,[u(getid,%q<t1>)])];@check [hasattr(%q<t1>,%VT`account_DB)]={@attach %!/msg`error={'[name(%q<t1>)]' is not part of an account. Please use the standard release command.}};@check [cor([hasflag(%q<pid>,FROZEN)],[hasflag(%q<pid>,PRISONER)])]={@attach %!/msg`error={The '[name(%q<pid>)]' is not either Frozen or Jailed. There is nothing to do.}};@dolist [lzone(%q<pid>)]={@set ##=!PRISONER !FROZEN !NO_MOVE !NO_TEL !SLAVE;@link ##=[u(gconfig,##,OOC_NEXUS)];@tel ##=[u(gconfig,##,OOC_NEXUS)]};@set %q<pid>=!FROZEN !PRISONER;@attach %!/msg`chan={[name(%#)] has released the account '[name(%q<Pid>)]' and all of the members.};@attach %!/msg={[name(%#)] has released the account '[name(%q<Pid>)]' and all of the members.},{[lzone(%q<pid>)]}
+
+&get_pages [u(cobj,bbk)]=[u(get_pages`%0,%1,%2,%3)]
+&get_pages`num [u(Cobj,bbk)]=[setq(cnt,words(%0,u(firstof,%1,%B)))][setq(div,[fdiv(%q<cnt>,%2)])][if(gte([after(%q<div>,.)],1),inc(before(%q<div>,.)),%q<div>)]
+&get_pages`list [u(cobj,bbk)]=[extract(%0,[u(get_pages`step,%2)],%2,u(firstof,%1,%b))]
+&get_pages`step [u(cobj,bbk)]=[iter([lnum(0,80)],[inc(mul(##,%0))])]
+
+@@ This will be edited eventually to add page support.
+&run`list [u(cobj,ams)]=th [setq(raw,[sortby(sort`dbname,[children([u(cobj,apo)])])])] [setq(list,[pages(list,%q<raw>,,[u(gconfig,%#,MAX_PER_PAGE)])])][setq(pg,[pages(num,%q<raw>,,[u(gconfig,%#,MAX_PER_PAGE)])])];@attach %!/run`partial=firstof(%0,1),[lnum(1,%q<pg>)],%B,page,Pages;@pemit %#=[line(Master Account List,%#,Header)]%R[printf($-3:.:s $-45:.:s $-5:.:s $-24:.:s,[ansi([setr(c,[u(gconfig,%#,COLUMN_NAMES)])],Sts)],[ansi(%q<c>,Account Name)],[ansi(%q<c>,Chars)],[ansi(%q<c>,Master Character)])];@dolist %q<list>={@pemit %#=[printf($-3s $-45s $^5s $-24s,%[[switch(1,[hasflag(##,PRISONER)],[ansi(%q<c>,J)],[hasflag(##,FROZEN)],[ansi(%q<c>,F)],%B)]%],[name(##)],[words([lzone(##)])],[if([hasattr(##,CONFIG`master_character`custom)],[name([get(##/CONFIG`MASTER_CHARACTER`custom)])],none)])]};@wait 0={@pemit %#=[line(Page [firstof(%0,1)] of %q<pg> -- +account/list <page num>,%#)]}
+
+&sort`dbname [u(cobj,bbk)]=[comp(name(%0),name(%1))]
+
+&run`jail [u(cobj,ams)]=@attach %!/run`getpc=%0,1;th [setq(pid,[u(getid,%q<t1>)])];@check [hasattr(%q<t1>,%VT`account_DB)]={@attach %!/msg`error={'[name(%q<t1>)]' is not part of an account. Please use the standard jail command.}};@dolist [lzone(%q<pid>)]={@set ##=PRISONER SLAVE NO_MOVE NO_TEL;@link ##=[u(gconfig,%#,JAIL_ROOM)];@tel ##=[u(gconfig,%#,JAIL_ROOM)]};@attach %!/msg`chan={[setr(m1,[name(%#)] has jailed all players attached to account '[name(%q<pid>)]'.)]};@attach %!/msg={%q<msg>},{[lzone(%q<pid>)]};@set %q<pid>=PRISONER
+
+&run`freeze [u(cobj,ams)]=@attach %!/run`getpc=%0,1;th [setq(pid,[u(getid,%q<t1>)])];@check [hasattr(%q<t1>,%VT`account_DB)]={@attach %!/msg`error={'[name(%q<t1>)]' is not part of an account. Please use the standard freeze command.}};@dolist [lzone(%q<pid>)]={@set ##=FROZEN NO_TEL;@link ##=[u(gconfig,%#,FREEZER_ROOM)];@tel ##=[u(gconfig,%#,FREEZER_ROOM)]};@attach %!/msg`chan={[setr(m1,[name(%#)] has frozen all players attached to account '[name(%q<pid>)]'.)]};@attach %!/msg={%q<msg>},{[lzone(%q<pid>)]};@set %q<pid>=FROZEN
+
+
+&run`deny [u(Cobj,ams)]=@check [hasattr(%#,%VT`account_DB)]={@attach %!/msg`error={You are not part of a game account.}};@check [u(can_manage,%#)]={@attach %!/msg`error={You are not permitted to deny join requests.}};th [setq(a1,[u(accid,%#)])][setq(list,[lattr(%q<a1>/%VT`REQUEST`*)])][setq(req,[extract(%q<list>,%0,1)])][setq(new,[get(%q<a1>/%q<req>)])];@check [not([hasattr(%q<new>,%VT`account_db)])]={@attach %!/msg`error={[name(%q<new>)] is already a member of an account.}};@check [gte(words(%q<req>),1)]={@attach %!/msg`error={Invalid Request number '%0'.}};&%q<req> %q<al>;@attach %!/msg={[name(%#)] denies [name(%q<new>)] to join the account.},{[lzone(%q<a1>)]};mail %q<new>=Account Denial//Your request to join the [name(%q<a1>)] account has been denied by [name(%#)].
+
+&run`approve [u(Cobj,ams)]=@check [hasattr(%#,%VT`account_DB)]={@attach %!/msg`error={You are not part of a game account.}};@check [u(can_manage,%#)]={@attach %!/msg`error={You are not permitted to approve join requests.}};th [setq(a1,[u(accid,%#)])][setq(list,[lattr(%q<a1>/%VT`REQUEST`*)])][setq(req,[extract(%q<list>,%0,1)])][setq(new,[get(%q<a1>/%q<req>)])];@check [not([hasattr(%q<new>,%VT`account_db)])]={@attach %!/msg`error={[name(%q<new>)] is already a member of an account.}};@check [gte(words(%q<req>),1)]={@attach %!/msg`error={Invalid Request number '%0'.}};@zone %q<new>=%q<a1>;&%q<req> %q<al>;@attach %!/msg={[name(%#)] approves [name(%q<new>)] to join the account.},{[lzone(%q<a1>)]};mail %q<new>=Account Approval//You have been added to the [name(%q<a1>)] account by [name(%#)].
+
+&run`reqlist [u(cobj,ams)]=@check [hasattr(%#,%VT`account_DB)]={@attach %!/msg`error={You are not part of a game account.}};@pemit %#=[line([name([u(accid,%#)])] - Account Request List,%#,Header)]%R[printf($-2:.:s $-30:.:s $-20:.:s,[ansi(gameconfig(%#,COLUMN_NAMES),#)],[ansi(gameconfig(%#,COLUMN_NAMES),Name)],[ansi(gameconfig(%#,COLUMN_NAMES),Request Date)])]%R[iter([lattr([setr(adb,[u(accid,%#)])]/%vt`request`*)],[printf($-2s $-30s $-20s,#@,[name([get(%q<adb>/##)])],[u(prettytime,[last(##,`)])],)],%B,%R)];@pemit %#=[line(,%#)]
+
+&prettytime [u(cobj,bbk)]=[timefmt($M/$D/$y $H:$T $p,%0)]
 
 &run`request [u(cobj,ams)]=@check [not([hasattr(%#,%VT`account_DB)])]={@attach %!/msg`error={You are already part of a game account.}};@attach %!/run`getpc=%0,1;th [setq(adb,[u(accid,%q<t1>)])];&%VT`Request`[secs()] %q<adb>=%:;@attach %!/msg={[name(%#)] has requested to join your account. Please see [ansi(u(gconfig,%#,line_text),+account/reqlist)] to approve or deny.},{[lzone(%q<adb>)]};@attach %!/msg={You have requested to join [name(%q<t1>)]'s account.}
 
@@ -77,5 +101,7 @@ th [u(newconfig,ACCOUNT_ONLY,AMS,ACCOUNT,MANAGE_ACCOUNT|ACCOUNT_PREFS|MASTER_CHA
 &shelp`install`main [u(Cobj,ams)]=Players/Account=[u(cobj,ams)]/shlp`ACCOUNT
 &shelp`uninstall [u(cobj,ams)]=Account
 &help`uninstall [u(cobj,ams)]=Account
+
+&shlp`account [u(cobj,ams)]=[ansi([u(gconfig,%#,line_accent)],Commands)]:%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+account/list %[<page>%])] - Lists all the accounts in the system. If there are multiple pages\, you can supply the page number.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+account/freeze <player>)] - )]
 
 +install AMS=1.0

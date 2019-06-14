@@ -29,6 +29,8 @@
 @startup start=@dolist [lattr(%!/start`**)]=@attach [u(cobj,start)]/##
 
 &start`flag`build [u(cobj,start)]=@flag Marker0=BUILD;@flagdef/set BUILD=Architect;@flagdef/unset build=Architect;@flagdef/see build=mortal
+&start`flag`frozen [u(cobj,start)]=@flag Marker1=FROZEN;@flagdef/set FROZEN=Royalty;@flagdef/unset FROZEN=Royalty;@flagdef/see FROZEN=architect
+&start`flag`prisoner [u(cobj,start)]=@flag Marker2=PRISONER;@flagdef/set PRISONER=IMMORTAL;@flagdef/unset PRISONER=IMMORTAL;@flagdef/see PRISONER=architect
 &start`function`isinstalled [u(cobj,start)]=@function/privileged isinstalled=[u(cobj,bbk)]/isinstalled
 &start`function`hasmodule [u(cobj,start)]=@function/privileged hasmodule=[u(cobj,bbk)]/hasmodule
 &start`config`07 [u(cobj,start)]=@admin global_parent_room=[after([u(gconfig,%!,GP_room)],#)]
@@ -55,6 +57,7 @@
 &start`function`alignfilter [u(cobj,start)]=@function/privileged alignfilter=[u(cobj,bbk)]/alignfilter
 &start`function`itemize [u(cobj,start)]=@function/privileged/preserve itemize=[u(cobj,bbk)]/itemize
 &start`function`getid [u(cobj,start)]=@function/privileged getid=[u(cobj,bbk)]/getid
+&start`function`pages [u(Cobj,start)]=@function/privileged pages=[u(cobj,bbk)]/get_pages
 &start`run`vt [u(Cobj,start)]=@VT [u(Cobj,bbk)]=[u(firstof,[u([u(cobj,gcs)]/config`system_attribute`custom)],[u([u(cobj,gcs)]/config`system_attribute`default)])]
 &start`config`04 [u(Cobj,start)]=@admin function_recursion_limit=100
 &start`config`03 [u(Cobj,start)]=@admin penn_setq=yes

@@ -4,6 +4,8 @@ th [u(newconfcat,ROOT)]
 th [u(newconfcat,COSMETIC)]
 
 @@ [u(newconfig,CONFIG NAME,SYSTEM MONIKER,CONFIG CATEGORY,DEFAULT,VALIDATOR,DESCRIP,PLAYER)]
+th [u(newconfig,JAIL_ROOM,CORE,SYSTEM,,DBREF,This is the room that jailed players go to.)]
+th [u(newconfig,FREEZER_ROOM,CORE,SYSTEM,,DBREF,This is the room that frozen players go to.)]
 th [u(newconfig,SYSTEM_TIMEZONE,CORE,SYSTEM,EST,TZ,This is the default system timezone.)]
 th [u(newconfig,SYSTEM_ATTRIBUTE,CORE,ROOT,MYSYS,WORD,The attribute tree that is used to setup system permissions and data.)]
 th [u(newconfig,SYSTEMS,CORE,ROOT,CORE,LIST,This is a list of which systems are installed or not. Do not edit manually.)]
