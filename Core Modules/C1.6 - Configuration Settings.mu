@@ -20,5 +20,13 @@ th [u(newconfig,RANK_COLOR_BLD,CORE,COSMETIC,+green,COLOR,This is the color used
 th [u(newconfig,RANK_COLOR_ADM,CORE,COSMETIC,+blue,COLOR,This is the color used for the ADM tag.)]
 th [u(newconfig,RANK_COLOR_WIZ,CORE,COSMETIC,+red,COLOR,This is the color used for the WIZ tag.)]
 th [u(newconfig,RANK_COLOR_OPS,CORE,COSMETIC,+gold,COLOR,This is the color used for the OPS tag.)]
+th [u(newconfig,RANK_COLOR_NEW,CORE,COSMETIC,+chartreuse2,COLOR,This is the color used for the NEW tag.)]
+th [u(newconfig,RANK_COLOR_GST,CORE,COSMETIC,+deeppink2,COLOR,This is the color used for the GST tag.)]
+th [u(newconfig,IC_TAG,CORE,COSMETIC,+darkmagenta,COLOR,This is the color used for the IC tag.)]
+th [u(newconfig,OOC_TAG,CORE,COSMETIC,+white,COLOR,This is the color used for the OOC tag.)]
+
+
+
+
 th [u(newconfig,LINE_FILL,CORE,COSMETIC,=,WORD,The character used to create the lines.,1)]
 th [u(newconfig,GAME_NAME,CORE,COSMETIC,Matrix Suite MUSH,WORD,The Prettified version of the game name.)]

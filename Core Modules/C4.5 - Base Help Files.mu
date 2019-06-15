@@ -2,7 +2,7 @@
 
 &hlp`charset [u(cobj,core)]=[ansi([u(gconfig,%#,line_accent)],Commands)]: %R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+charset)] - Shows all the available characters that can be generated on the game server. These are used in conjunction with the \[chr\(\)\] function.)]
 
-
+&shlp`cobj [u(Cobj,core)]=[ansi([u(gconfig,%#,line_accent)],Commands)]:%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+coreobjects)] - Shows all core code objects Matrix MUSH Code Suite.)]
 
 &hlp`credits [u(cobj,core)]=%TThe Matrix Code Suite was heavily influenced by Volund's Code Suite in both appearance and functionality. While some of the backbone code is directly copied from Volund, the majority of the code is original to this suite. The Suite is coded exclusively for RhostMUSH and will not be supported on any other platform.%R%R%TI consider this the spiritual successor to Volund's Code Suite. All credit goes to Volund for the parts of the code that he wrote. The code that was inspired by his code suite is mostly inspired for the look and functionality, not the actual code. %R%R%TIn addition to Volund's Code Suite there are several other systems that are highly modified to fit the system, but were not entirely coded by Matrix for the code suite. These include, but are not limited to, AshComm, the mailwrappers and a few other systems. Matrix will fully disclose which systems, if desired.%R%R%TThis code suite is not intended to challenge anyone's creative effort or to take credit. The suite has modified these code systems to work with its systems to allow for ease of install and integration. The goal was to simply create a code snapshot that would make it easy to get a RhostMUSH up and running from the code system with minimal effort.%R%R%R%TThanks,%R%T%TMatrix.
 
@@ -26,3 +26,4 @@
 +help/add Technical/Credits=[u(cobj,core)]/hlp`credits
 +help/add Technical/+config=[u(cobj,core)]/hlp`config
 +help/addsub +config/Validators=[u(cobj,core)]/shlp`validators
++shelp/add Technical/+coreobjects=[u(cobj,core)]/shlp`cobj

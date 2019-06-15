@@ -17,3 +17,7 @@
 &run`install`remove [u(cobj,core)]=@check [gte(words(%0),1)]={@attach %!/msg`error={You must supply something to remove.}};@check [gtm([setr(ins,[u(gconfig,%#,SYSTEMS)])],[ucstr(%0)],|)]={@attach %!/msg`error={Module "[ansi([u(gconfig,%#,Line_text)],[ucstr(%0)])]" is not installed.}};&config`systems`current [u(cobj,gcs)]=[remove(%q<ins>,[ucstr(%0)],|)];&install`%0 [u(cobj,bbk)];&install`%0`ver [u(cobj,bbk)];&install`%0`date [u(cobj,bbk)];@attach %!/msg={You have uninstalled the "[ansi([u(gconfig,%#,Line_text)],[ucstr(%0)])]" module.};@attach %!/msg`chan={Module "[ansi([u(gconfig,%#,Line_text)],[ucstr(%0)])]" has been uninstalled.};@attach [u(cobj,%q<ins>)]/script`uninstall
 
 &CMD`CHARSET [u(cobj,core)]=$+charset:@pemit %#=wrap(iter(lnum(32,256),if(comp(first(chr(%i0)),#-1),ljust([ljust(%i0:,4)] [ansi(hy,chr(%i0))],7)),%B,),78)
+
+&cmd`coreobjects [u(cobj,core)]=$^(?s)(?\:\+)?(coreobjects|coreobj|cobj)$:@pemit %#=[line(Master System Core Objects,%#,Header)]%R[printf($-3:.:s $-45:.:s $-13:.:s $-16:.:s,[ansi([setr(c,[u(gconfig,%#,COLUMN_NAMES)])],CMD)],[ansi(%q<c>,Object Name)],[ansi(%q<c>,REF)],[ansi(%q<c>,DBREF)])];@dolist [sort([lattr([u(cobj,bbk)]/cobj`*)])]={@pemit %#=[printf($-3s $-45s $-13s $-16s,%[[if([hasflag([setr(db,[get([u(cobj,bbk)]/##)])],COMMANDS)],[ansi(+green,Y)],[ansi(+red,N)])]%],[name(%q<db>)],[last(##,`)],%q<db>)]};@wait 0={@pemit %#=[line(,%#)]}
+
+@set [u(cobj,core)]/cmd`coreobjects=regexp

@@ -56,6 +56,7 @@
 &start`function`alignfilter [u(cobj,start)]=@function/privileged alignfilter=[u(cobj,bbk)]/alignfilter
 &start`function`itemize [u(cobj,start)]=@function/privileged/preserve itemize=[u(cobj,bbk)]/itemize
 &start`function`getid [u(cobj,start)]=@function/privileged getid=[u(cobj,bbk)]/getid
+&start`function`hasaccount [u(cobj,start)]=@function/privileged hasaccount=[u(cobj,bbk)]/hasaccount
 &start`function`pages [u(Cobj,start)]=@function/privileged pages=[u(cobj,bbk)]/get_pages
 &start`run`vt [u(Cobj,start)]=@VT [u(Cobj,bbk)]=[u(firstof,[u([u(cobj,gcs)]/config`system_attribute`custom)],[u([u(cobj,gcs)]/config`system_attribute`default)])]
 &start`config`04 [u(Cobj,start)]=@admin function_recursion_limit=100
@@ -115,8 +116,10 @@
 &hastag bbk=[u(gtm,[get(%0/%vt`tags)],[ucstr(%1)])]
 
 &playerid bbk=[setr(p1,[objid(u(strfirstof,%0,%#))])]
-&accid bbk=[setr(a1,[get(%0/%vt`account_db)])]
+&accid bbk=[setq(zones,[lzone(%0)])][setq(acts,[filter(filter`is_account,%q<zones>)])][setq(act,first(%q<acts>))][setr(a1,[objid(%q<act>)])]
+&filter`is_account [u(cobj,bbk)]=[gtm([parents(%0)],[before([u(cobj,apo)],:)])]
 &getid bbk=[setr(id,[u([u(cobj,core)]/get_id,%0,%1)])]
+&hasaccount bbk=[isdbref([u(accid,%0)])]
 
 
 
