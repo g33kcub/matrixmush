@@ -7,11 +7,13 @@
 @set AMS=NO_MODIFY INDESTRUCTIBLE SAFE SIDEFX COMMANDS INHERIT
 @parent AMS=BBK
 @fo me=&cobj`AMS bbk=[objid(AMS)]
+@tel [u(cobj,ams)]=#[config(master_room)]
 
 @create Account Parent Object <APO>
 @set apo=NO_MODIFY INDESTRUCTIBLE SAFE SIDEFX INHERIT
 @parent apo=BBK
 @fo me=&cobj`apo bbk=[objid(APO)]
+@tel [u(cobj,apo)]=[u(cobj,ams)]
 
 th [u(newconfcat,ACCOUNT)]
 @@ [u(newconfig,CONFIG NAME,SYSTEM MONIKER,CONFIG CATEGORY,DEFAULT,VALIDATOR,DESCRIP,PLAYER)]
