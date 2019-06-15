@@ -1,5 +1,5 @@
 reality_level real 1
-#reality_level Obf1 2
+#reality_level ghost 2
 #reality_level Obf2 4
 #reality_level Obf3 8 OBFDESC
 #reality_level Obf4 16 OBFDESC

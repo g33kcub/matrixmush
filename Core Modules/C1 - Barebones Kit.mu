@@ -22,8 +22,7 @@
 &msg`header [u(Cobj,bbk)]=localize(ansi(u(setr,msgcolor,u(gconfig,u(firstof,%1,%#),ALERT_FRAME)),[chr(91)])[ansi(u(gconfig,u(firstof,%1,%#),ALERT_TEXT),ucstr(%0))][ansi(%q<msgcolor>,[chr(93)])])
 &msg`chan [u(cobj,bbk)]=@check [gtm([u(gconfig,%#,SYSTEMS)],COMSYS,|)];
 
-&script`uninstall [u(cobj,bbk)]=@set me=!COMMANDS;@dolist/delimit | {[u(help`uninstall)]}={+help/delete ##};@dolist/delimit | {[u(shelp`uninstall)]}={+shelp/delete ##}
-&script`install [u(cobj,bbk)]=@dolist/delimit | {[u(help`install`main)]}={+help/add ##};@dolist/delimit | {[u(help`install`sub)]}={+help/addsub ##};@dolist/delimit | {[u(shelp`install`main)]}={+shelp/add ##};@dolist/delimit | {[u(shelp`install`sub)]}={+shelp/addsub ##}
+
 
 @@ Startup System (START)
 @startup start=@dolist [lattr(%!/start`**)]=@attach [u(cobj,start)]/##

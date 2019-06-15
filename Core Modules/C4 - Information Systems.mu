@@ -54,7 +54,18 @@ th [u(newconfig,USE_RULES,CORE,SYSTEM,1,BOOL,Enable the Use of the +rules system
 &init`news [u(Cobj,help)]=th [setq(sys,NEWS)][setq(db,[u(Cobj,NDB)])]
 &init`book [u(Cobj,help)]=th [setq(sys,BOOK)][setq(db,[u(Cobj,BDB)])];@check [isadmin(%#)]={@attach %!/msg`error={Permission Denied.}}
 &init`rules [u(Cobj,help)]=th [setq(sys,RULES)][setq(db,[u(Cobj,RDB)])]
+&cmd`+help`main [u(Cobj,help)]=@attach %!/run`isactive=%1;@attach %!/init`%1;@attach %!/run`switches=%2;@attach %!/run`switch`[u(strfirstof,%q<switch>,MAIN)]=trim(%3),trim(%4),trim(%5),trim(%6),%1
 
+@@ 0 = Blah
+@@ 1 = System
+@@ 2 = Switch
+@@ 3 = Category
+@@ 4 = Name
+@@ 5/6 = DBREF/FILE
+@@ 7 = SYSTEM
+
+
+&systembot`add`help [u(cobj,help)]=th [setq(db,[u(cobj,hdb)])]
 
 &SWITCHES`PLAYER [u(cobj,help)]=
 &SWITCHES`ADMIN [u(cobj,help)]=HELP|ADD|ADDSUB|STATS|CATEGORY|RENAMECATEGORY|DELETECATEGORY|RENAME|RENAMESUB|DELETE|DELETESUB
@@ -109,9 +120,12 @@ th [u(newconfig,USE_RULES,CORE,SYSTEM,1,BOOL,Enable the Use of the +rules system
 
 &run`switch`add [u(cobj,help)]=@attach %!/init`%4;@switch [t(strlen(%0))][t(strlen(%1))][t(strlen(%3))]=0??,{@attach %!/msg`error={You must supply a category for your file.}},10?,{@attach %!/msg`error={You must name your file.}},110,{@attach %!/msg`error={You can't set a file with no information.}},111,{@attach %!/run`switch`add`[gtm([u(get_topics`main,%q<db>)],%1,|)]=trim(%0),trim(%1),trim(%3),trim(%4),%q<sys>}
 
+
 &run`switch`add`0 [u(cobj,help)]=@attach %!/init`%3;@attach %!/run`get_next_num=%q<db>;&[setr(fa,file`%q<new>)] %q<db>=[caps(%1)];&%q<fa>`category %q<db>=[ucstr(%0)];&%q<fa>`update %q<db>=[secs()];&%q<fa>`updated_by %q<db>=%:;&main %q<db>=[setunion([get(%q<db>/main)],%q<new>,|)];&files %q<db>=[setunion([get(%q<db>/files)],%q<new>,|)];@switch [strmatch(%2,#*/*)]=0,{&file`%q<new>`body %q<db>=%2;@attach %!/msg={File "[ansi([u(gconfig,%#,line_text)],%1)]" added to category "[ansi([u(gconfig,%#,line_text)],%0)]".};@attach %!/msg`chan={File "[ansi([u(gconfig,%#,line_text)],%1)]" added to category "[ansi([u(gconfig,%#,line_text)],%0)]".}},1,{@switch [cand([t(strlen([u(%2)]))],[hasattr(%2)])]=0,{@attach %!/msg`error={The system process that DBREF/ATTRIBUTE combination.}},1,{&file`%q<new>`body %q<db>=%2;@attach %!/msg={File "[ansi([u(gconfig,%#,line_text)],%1)]" added to category "[ansi([u(gconfig,%#,line_text)],%0)]".};@attach %!/msg`chan={File "[ansi([u(gconfig,%#,line_text)],%1)]" added to category "[ansi([u(gconfig,%#,line_text)],%0)]".}}
 
 &run`switch`add`1 [u(cobj,help)]=@attach %!/init`%3;@attach %!/run`get_topic`main=%1;@switch [strmatch(%2,#*/*)]=0,{&file`%q<tid>`update %q<db>=[secs()];&file`%q<tid>`updated_by %q<db>=%:;&file`%q<tid>`body %q<db>=%2;@attach %!/msg={File "[ansi([u(gconfig,%#,line_text)],%1)]" updated.};@attach %!/msg`chan={File "[ansi([u(gconfig,%#,line_text)],%1)]" updated.}},1,{@switch [cand([t(strlen([u(%2)]))],[hasattr(%2)])]=0,{@attach %!/msg`error={The system process that DBREF/ATTRIBUTE combination.}},1,{&file`%q<tid>`update %q<db>=[secs()];&file`%q<tid>`updated_by %q<db>=%:;&file`%q<tid>`body %q<db>=%2;@attach %!/msg={File "[ansi([u(gconfig,%#,line_text)],%1)]" updated.};@attach %!/msg`chan={File "[ansi([u(gconfig,%#,line_text)],%1)]" updated.}}
+
+
 
 &run`get_next_num [u(cobj,help)]=&system`next %q<db>=[setr(new,[u(get_next_num,[get(%q<db>/system`next)])])]
 

@@ -29,35 +29,14 @@ th [u(newconfig,MAX_PER_PAGE,AMS,ACCOUNT,20,INT,The maximum amount of accounts t
 &system`desc ams=This system setups and manages player accounts.
 
 &switches`player [u(cobj,ams)]=RENAME|NEW|REQUEST|REQLIST|APPROVE|DENY
-&switches`admin [u(cobj,ams)]=FREEZE|JAIL|LIST|RELEASE
-
-
-@@ %0 = +account/switch SET1=Set2/Set3/set4/set5/set6/set7/set8
-@@ %1 = switch
-@@ %2 = SET1
-@@ %3 = Set2
-@@ %4 = Set3
-@@ %5 = set4
-@@ %6 = set5
-@@ %7 = set6
-@@ %8 = set7
-@@ %9 = set8
+&switches`admin [u(cobj,ams)]=FREEZE|JAIL|LIST|RELEASE|CREATE
 
 &cmd`account [u(cobj,ams)]=$^\+account(?\:/(\\S+)?)?(?\: +(.+?))?(?\:=(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?$:@attach %!/CMD`ACCOUNT`MAIN
 @set [u(cobj,ams)]/cmd`account=regexp
 @set [u(cobj,ams)]/cmd`account=no_inherit
 &cmd`account`main [u(cobj,ams)]=@attach %!/run`switches=%1;@attach %!/run`[u(strfirstof,%q<switch>,MAIN)]=%2,%3,%4,%5,%6,%7,%8,%9
 
-@@ %0 = SET1
-@@ %1 = Set2
-@@ %2 = Set3
-@@ %3 = set4
-@@ %4 = set5
-@@ %5 = set6
-@@ %6 = set7
-@@ %7 =
-@@ %8 =
-@@ %9 =
+&run`create [u(cobj,ams)]=@attach %!/run`getpc=%0,1;@check [not([hasattr(%q<t1>,%VT`account_DB)])]={@attach %!/msg`error={[name(%q<t1>)] is already part of a game account.}};@check [not([gtm([U(get`account_list)],%1,|)])]={@attach %!/msg`error={'%1' is already an account.}};@attach %!/validator`email=%1;th [setq(act,[create(%1)])];@parent %q<act>=[u(cobj,apo)];@tel %q<act>=[u(cobj,apo)];&config`master_character`custom %q<act>=[objid(%q<t1>)];@set %q<act>=zonemaster;@zone/add %q<t1>=%q<act>;&%vt`account_db %q<t1>=[objid(%q<act>)];@dolist [lattr(%q<t1>/CONFIG`**,,,,,1)]={&## %q<act>=[get(%q<t1>/##)];&## %q<t1>};@dolist [lattr(%q<t1>/%VT`READ`**,,,,,1)]={&## %q<act>=[get(%q<t1>/##)];&## %q<t1>};@attach %!/msg={[name(%#)] has created the account '%1'. All of your configuration items have been copied to the account, as well as any readable and trackable items, such as news and help. You have been set as the master character and this can be changed by viewing [ansi([u(gconfig,%#,line_text)],+config)]. Welcome.},{[lzone(%q<act>)]};@attach %!/msg={You create the account '%1' and add '[name(%q<t1>)]' as the master character.}
 
 &run`release [u(cobj,ams)]=@attach %!/run`getpc=%0,1;th [setq(pid,[u(getid,%q<t1>)])];@check [hasattr(%q<t1>,%VT`account_DB)]={@attach %!/msg`error={'[name(%q<t1>)]' is not part of an account. Please use the standard release command.}};@check [cor([hasflag(%q<pid>,FROZEN)],[hasflag(%q<pid>,PRISONER)])]={@attach %!/msg`error={The '[name(%q<pid>)]' is not either Frozen or Jailed. There is nothing to do.}};@dolist [lzone(%q<pid>)]={@set ##=!PRISONER !FROZEN !NO_MOVE !NO_TEL !SLAVE;@link ##=[u(gconfig,##,OOC_NEXUS)];@tel ##=[u(gconfig,##,OOC_NEXUS)]};@set %q<pid>=!FROZEN !PRISONER;@attach %!/msg`chan={[name(%#)] has released the account '[name(%q<Pid>)]' and all of the members.};@attach %!/msg={[name(%#)] has released the account '[name(%q<Pid>)]' and all of the members.},{[lzone(%q<pid>)]}
 
@@ -91,17 +70,17 @@ th [u(newconfig,MAX_PER_PAGE,AMS,ACCOUNT,20,INT,The maximum amount of accounts t
 &can_manage [u(cobj,ams)]=[if([u(gconfig,%0,MANAGE_ACCOUNT)],1,[gtm([u(gconfig,%0,MASTER_CHARACTER)],[objid(%0)],|)])]
 
 &get`account_list [u(cobj,ams)]=[iter([children([cobj(apo)])],[name(##)],%B,|)]
-&run`new [u(cobj,ams)]=@check [gameconfig(%#,CREATE_ACCOUNT)]={@attach %!/msg`error={This game does not allow players to create their own accounts. Please contact staff.}};@check [not([hasattr(%#,%VT`account_DB)])]={@attach %!/msg`error={You are already part of a game account.}};@check [not([gtm([U(get`account_list)],%0,|)])]={@attach %!/msg`error={'%0' is already an account. If you are supposed to be part of it use: [ansi(u(gconfig,%#,line_text),+account/request %0)]}};@attach %!/validator`email=%0;th [setq(act,[create(%0)])];&config`master_character`custom %q<act>=%:;@set %q<act>=zonemaster;@zone/add %#=%q<act>;&%vt`account_db %#=[objid(%q<act>)];@dolist [lattr(%#/CONFIG`**,,,,,1)]={&## %q<act>=[get(%#/##)];&## %#};@dolist [lattr(%#/%VT`READ`**,,,,,1)]={&## %q<act>=[get(%#/##)];&## %#};@attach %!/msg={You have created the account '%0'. All of your configuration items have been copied to the account, as well as any readable and trackable items, such as news and help. You have been set as the master character and this can be changed by viewing [ansi([u(gconfig,%#,line_text)],+config)]. Welcome.}
+&run`new [u(cobj,ams)]=@check [gameconfig(%#,CREATE_ACCOUNT)]={@attach %!/msg`error={This game does not allow players to create their own accounts. Please contact staff.}};@check [not([hasattr(%#,%VT`account_DB)])]={@attach %!/msg`error={You are already part of a game account.}};@check [not([gtm([U(get`account_list)],%0,|)])]={@attach %!/msg`error={'%0' is already an account. If you are supposed to be part of it use: [ansi(u(gconfig,%#,line_text),+account/request %0)]}};@attach %!/validator`email=%0;th [setq(act,[create(%0)])];&config`master_character`custom %q<act>=%:;@parent %q<act>=[u(cobj,apo)];@tel %q<act>=[u(cobj,apo)];@set %q<act>=zonemaster;@zone/add %#=%q<act>;&%vt`account_db %#=[objid(%q<act>)];@dolist [lattr(%#/CONFIG`**,,,,,1)]={&## %q<act>=[get(%#/##)];&## %#};@dolist [lattr(%#/%VT`READ`**,,,,,1)]={&## %q<act>=[get(%#/##)];&## %#};@attach %!/msg={You have created the account '%0'. All of your configuration items have been copied to the account, as well as any readable and trackable items, such as news and help. You have been set as the master character and this can be changed by viewing [ansi([u(gconfig,%#,line_text)],+config)]. Welcome.}
 
-&run`main [u(cobj,ams)]=@check [hasattr(%#,%VT`account_DB)]={@attach %!/msg`error={You are not assigned to an account. Please use [ansi([gameconfig(%#,line_text)],+account/new <account name>)] or [ansi([gameconfig(%#,line_text)],+account/request <player name>)] to create or request addition to an existing account.}};@pemit %#=[line([gameconfig(%#,Game_name)] - Account Data,%#,Header)]%R[printf($-20s $-[sub([gameconfig(%#,width)],21)]s,[ansi([gameconfig(%#,line_text)],Account Name)]:,[name([setr(adb,[get(%#/%VT`account_db)])])])]%R[printf($-20s $-[sub([gameconfig(%#,width)],21)]s,[ansi([gameconfig(%#,line_text)],Account Members)]:,[words(lzone(%q<adb>))])][if([and([isinstalled(XP)],[hasmodule(XP,ACCOUNT)])],%R[u(run`main`xp,%q<adb>)])]%R[line(Account Members,%#)]%R[printf($-30:.:s $8:.:s $4:.:s,[ansi(gameconfig(%#,COLUMN_NAMES),Name)],[ansi(gameconfig(%#,COLUMN_NAMES),N,n,/,gameconfig(%#,COLUMN_NAMES),U,n,/,gameconfig(%#,COLUMN_NAMES),T)],[ansi(gameconfig(%#,COLUMN_NAMES),Idle)])]%R[iter(sortname(lzone(%q<adb>)),[u(run`main`fmt,##)],%b,%R)];@pemit %#=[line(,%#)]
+&get_account [u(cobj,ams)]=[u(get_account`[strmatch(%1,*@*.*)],%0,%1)]
+&get_account`0 [u(cobj,ams)]=[pmatch([firstof(%1,%0)])]
+&get_account`1 [u(cobj,ams)]=[setq(acts,[children([u(cobj,apo)])])][setq(anm,[iter(%q<acts>,[name(##)],%B,|)])][setq(bingo,[if(gtm(%q<anm>,%1,|),[extract(%q<acts>,[match(%q<anm>,%1,|)],1)])])][objid(%q<bingo>)]
+
+&run`main [u(cobj,ams)]=th [setq(pid,[if(isadmin(%#),u(get_account,%#,%0),%#)])];@check isdbref(%q<pid>)={@attach %!/msg`error={'%0' cannot be found as either a player or an account.}};@attach %!/run`main`[type(%q<pid>)]=%q<pid>
+
+&run`main`thing [u(cobj,ams)]=@pemit %#=[line([gameconfig(%#,Game_name)] - Account Data,%#,Header)]%R[printf($-20s $-[sub([gameconfig(%#,width)],21)]s,[ansi([gameconfig(%#,line_text)],Account Name)]:,[name([setr(adb,%q<pid>)])])]%R[printf($-20s $-[sub([gameconfig(%#,width)],21)]s,[ansi([gameconfig(%#,line_text)],Account Members)]:,[words(lzone(%q<adb>))])][if([and([isinstalled(XP)],[hasmodule(XP,ACCOUNT)])],%R[u(run`main`xp,%q<adb>)])]%R[line(Account Members,%#)]%R[printf($-30:.:s $8:.:s $4:.:s,[ansi(gameconfig(%#,COLUMN_NAMES),Name)],[ansi(gameconfig(%#,COLUMN_NAMES),N,n,/,gameconfig(%#,COLUMN_NAMES),U,n,/,gameconfig(%#,COLUMN_NAMES),T)],[ansi(gameconfig(%#,COLUMN_NAMES),Idle)])]%R[iter(sortname(lzone(%q<adb>)),[u(run`main`fmt,##)],%b,%R)];@pemit %#=[line(,%#)]
+
+
+&run`main`player [u(cobj,ams)]=@check [hasattr(%q<pid>,%VT`account_DB)]={@attach %!/msg`error={[if(gte(words(%0),1),[name(%q<pid>)] is,You are)] not assigned to an account.[if(gte(words(%0),1),,%BPlease use [ansi([gameconfig(%#,line_text)],+account/new <account name>)] or [ansi([gameconfig(%#,line_text)],+account/request <player name>)] to create or request addition to an existing account.)]}};@pemit %#=[line([gameconfig(%#,Game_name)] - Account Data,%#,Header)]%R[printf($-20s $-[sub([gameconfig(%#,width)],21)]s,[ansi([gameconfig(%#,line_text)],Account Name)]:,[name([setr(adb,[get(%q<pid>/%VT`account_db)])])])]%R[printf($-20s $-[sub([gameconfig(%#,width)],21)]s,[ansi([gameconfig(%#,line_text)],Account Members)]:,[words(lzone(%q<adb>))])][if([and([isinstalled(XP)],[hasmodule(XP,ACCOUNT)])],%R[u(run`main`xp,%q<adb>)])]%R[line(Account Members,%#)]%R[printf($-30:.:s $8:.:s $4:.:s,[ansi(gameconfig(%#,COLUMN_NAMES),Name)],[ansi(gameconfig(%#,COLUMN_NAMES),N,n,/,gameconfig(%#,COLUMN_NAMES),U,n,/,gameconfig(%#,COLUMN_NAMES),T)],[ansi(gameconfig(%#,COLUMN_NAMES),Idle)])]%R[iter(sortname(lzone(%q<adb>)),[u(run`main`fmt,##)],%b,%R)];@pemit %#=[line(,%#)]
 
 &run`main`fmt [u(cobj,ams)]=[printf($-30s $8s $4s,[if(u(isadmin,%0),[ansi([gameconfig(%#,line_accent)],*)])][cname(%0)],[extract([setr(mail,mailquick(%0))],2,1)]/[extract(%q<mail>,3,1)]/[extract(%q<mail>,1,1)],[hideidle(%0)])]
-
-&help`install`main [u(cobj,ams)]=Character/Account=[u(cobj,ams)]/HLP`ACCOUNT
-&shelp`install`main [u(Cobj,ams)]=Players/Account=[u(cobj,ams)]/shlp`ACCOUNT
-&shelp`uninstall [u(cobj,ams)]=Account
-&help`uninstall [u(cobj,ams)]=Account
-
-&shlp`account [u(cobj,ams)]=[ansi([u(gconfig,%#,line_accent)],Commands)]:%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+account/list %[<page>%])] - Lists all the accounts in the system. If there are multiple pages\, you can supply the page number.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+account/freeze <player>)] - )]
-
-+install AMS=1.0
