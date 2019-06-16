@@ -13,7 +13,9 @@ th [u(newconfig,DARK_EXITS,CORE,COSMETIC,+darkolivegreen4,COLOR,This is the colo
 
 
 
-@nameformat ROOM=[center([ansi([gameconfig(%#,line_text)],[name(me)])][if(controls(%!,[num(me)]),%[[num(me)][flags([num(me)])]%])],[gameconfig(%#,width)])]%R[if([isinstalled(LOCATIONS)],[u(get_zones,[num(me)],%#)])][line(,%#)]
+@nameformat [u(cobj,room)]=[center([ansi([gameconfig(%#,line_text)],[name(me)])][if(controls(%!,[num(me)]),%[[num(me)][flags([num(me)])]%])],[gameconfig(%#,width)])]%R[if(and([isinstalled(LOCATIONS)],isdbref(area(num(me)))),[u(get_zones,[num(me)],%#)])][line(,%#)]
+
+&get_zones [u(cobj,room)]=[printf($^80s,[iter([area(%0,list)],%[[cname(##)]%],%B,%B[ansi([u(gconfig,%1,line_text)],+)]%B)])]%R
 
 &fil`cansee room=[cansee(%q<lkr>,%0)]
 

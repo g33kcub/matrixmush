@@ -144,10 +144,11 @@
 &setr [u(cobj,bbk)]=[setr(%0,%1)]
 &setq [u(cobj,bbk)]=[setq(%0,%1)]
 &itemize [u(Cobj,bbk)]=[setq(ansi,%5)][elist(%0,%2,%1,%4,%3,[ansi(%q<ansi>,%0)])]
-
+&COBJ #5=[default(%!/cobj`%0,#-1)]
+&COBJdb #5=[before([default(%!/cobj`%0,#-1)],:)]
 
 &run`switches [u(cobj,bbk)]=@attach %!/run`partial=%0,[u(get_switches,%#,%q<subsys>)],|,switch,Switches
-&get_switches [u(cobj,bbk)]=[setunion([setr(lswitch,[iter(PLAYER [if(u(isadmin,%#),ADMIN)] [if(u(iswiz,%#),WIZARD)] [if(u(isops,%#),OPERATIONS)],[u(SWITCHES[if(gte(words(%1),1),`%1)]`##)],%B,|)])],%q<lswitch>,|)]
+&get_switches [u(cobj,bbk)]=[setunion([setr(lswitch,[iter(PLAYER [if(or(u(isadmin,%#),u(isbldr,%#)),BUILDER)] [if(u(isadmin,%#),ADMIN)] [if(u(iswiz,%#),WIZARD)] [if(u(isops,%#),OPERATIONS)],[u(SWITCHES[if(gte(words(%1),1),`%1)]`##)],%B,|)])],%q<lswitch>,|)]
 
 &run`partial [u(cobj,bbk)]=@select/inline or(not(strlen(%0)),[u(setq,color,[gameconfig(getid(%#),LINE_TEXT)])]u(setr,matched,match(%1,u(setr,u(strfirstof,%3,choice),%0),u(strfirstof,%2,%b))))=0,{@check words(u(setr,u(strfirstof,%3,choice),graball(%1,%0*,u(strfirstof,%2,%b),u(strfirstof,%2,%b))))=@attach %!/msg`error={Invalid [ansi(%q<Color>,%4)]! Valid choices are: [elist(%1,and,u(strfirstof,%2,%B),,,[ansi(%q<color>,%0)])]};@stop gt(words(r(u(strfirstof,%3,choice)),u(strfirstof,%2,%b)),1)=@attach %!/MSG`error={[ansi(%q<color>,%0)] matched [elist(r(u(strfirstof,%3,choice)),and,u(strfirstof,%2,%b),,,[ansi(%q<color>,%0)])]. Please be more specific.}},1,{@select/inline cand(t(strlen(%0)),t(%q<matched>))=1,{th u(setq,u(strfirstof,%3,choice),elements(%1,%q<matched>,u(strfirstof,%2,%b)))}}
 
