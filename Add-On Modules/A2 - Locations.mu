@@ -18,6 +18,12 @@
 @fo me=&cobj`apar [u(cobj,BBK)]=[objid(apar)]
 @tel [u(cobj,apar)]=[u(cobj,area)]
 
+@create Map Parent Object <MPO>
+@set mpo=NO_MODIFY INDESTRUCTIBLE SAFE SIDEFX INHERIT
+@parent mpo=bbk
+@fo me=&cobj`mpo bbk=[objid(MPO)]
+@tel [u(cobj,mpo)]=[u(cobj,locations)]
+
 
 &system`desc [u(cobj,locations)]=This is the basic system for Maps, +who, +where and Areas.
 th [u(newconfcat,Locations)]
@@ -144,13 +150,28 @@ th [u(newconfig,STATUS_COLOR_UNFINDABLE,LOCATIONS,Locations,+darkseagreen,COLOR,
 th [u(newconfig,MASTER_MAP,LOCATIONS,Locations,,DBREF,The object dbref that will be used for the default master map.)]
 th [u(newconfig,USE_AREA_MAPS,LOCATIONS,Locations,0,BOOL,Does your game support maps for each +area or do you just use the master map?)]
 
+
+
 &cmd`map [u(cobj,locations)]=$^\+map(?\:/(\\S+)?)?(?\: +(.+?))?(?\:=(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?(?\:/(.+?))?$:@attach %!/CMD`map`MAIN
 @set [u(cobj,locations)]/cmd`map=regexp
 &cmd`map`main [u(cobj,locations)]=th [setq(subsys,MAP)];@attach %!/run`switches=%1;@attach %!/run`map`[u(strfirstof,%q<switch>,MAIN)]=%2,%3,%4,%5,%6,%7,%8,%9
 
 &switches`map`player [u(cobj,locations)]=
-&switches`map`admin [u(cobj,locations)]=SET|DRAW|CLEAR
+&switches`map`admin [u(cobj,locations)]=ADD|REMOVE|INIT
 
-&run`map`main [u(cobj,locations)]=@check [u(gconfig,%#,USE_AREA_MAPS)]={@attach %!/display`map=MASTER};
+&run`map`init [u(cobj,locations)]=@check [isdbref(%0)]={@attach %!/msg`error={You must use the DBREF of the object you want to setup as a map.}};@check [not([gtm([parent(%0)],[u(Cobjdb,mpo)])])]={@attach %!/msg`error={'[cname(%0)]' is already setup as a map object.}};@parent %0=[u(cobj,mpo)];@attach %!/msg={You have added the '[cname(%0)]' as a map object.}
 
-&display`map [u(cobj,locations)]=@check [gtm(%0,MASTER,|)]={};@check [isdbref([setr(mm,[u(gconfig,%#,MASTER_MAP)])])]={@attach %!/msg`error={There is no master map object defined for this game.}}
+
+&run`map`main [u(cobj,locations)]=@check [gte(strlen(%0),1)]={@check [u(gconfig,%#,USE_AREA_MAPS)]={@attach %!/display`map=MASTER};@attach %!/display`map=[area(%L)]};@attach %!/run`get_mapdb=%0;@attach %!/draw`map=%q<mdb>
+
+&display`map [u(cobj,locations)]=@attach %!/display`map`[firstof(%0,DEFAULT)]
+&display`map`master [u(Cobj,locations)]=@check [isdbref([setr(mm,[u(gconfig,%#,MASTER_MAP)])])]={@attach %!/msg`error={There is no master map object assigned to the system.}};@attach %!/draw`map=%q<mm>,%#
+&display`map`default [u(Cobj,locations)]=@check [hasattrp(%0,%VT`MAPDB)]={@attach %!/msg`error={The '[cname(%0)]' area does not have a map specific to it.}};th [setq(mdb,[u(%0/%VT`MAPDB)])];@attach %!/draw`map=%q<mdb>,[loc(%#)]
+
+&draw`map [u(cobj,locations)]=@pemit %#=[line([name(%0)] Map,%#,header)];@dolist [sort([lattrp(%0/line-*)])]={@pemit %#=[u(%0/##,%1)]};@wait 0={@pemit %#=[line(,%#)]}
+
+
+@@ Mapfn(PLAYER,X,Y,CHAR)
+&mapfn [u(cobj,locations)]=[setq(loc,room(%0))][setq(cx,[get(%q<loc>/%VT`MAP`X)])][setq(cy,[get(%q<loc>/%VT`MAP`Y)])][switch([gtm(%q<cx>,%1)]:[gtm(%q<cy>,%2)],1:1,[ansi([u(gconfig,%0,LINE_ACCENT)],%3)],%3)]
+
+&start`function`mapfn [U(cobj,start)]=@function/privileged/preserve mapfn=[u(cobj,locations)]/mapfn
