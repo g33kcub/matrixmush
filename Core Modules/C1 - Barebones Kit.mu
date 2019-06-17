@@ -19,7 +19,7 @@
 &msg`error [u(cobj,bbk)]=@pemit/list u(strfirstof,%1,%#)=udefault(%!/MSG`fmt`error,%0,##,%0,%1,u(SYSTEM`NAME))
 &msg`fmt [u(cobj,bbk)]=u(msg`header,%3,%0) %1
 &msg`fmt`error [u(cobj,bbk)]=u(msg`header,%3,%0) [ansi(+red,ERROR)]: %1
-&msg`header [u(Cobj,bbk)]=localize(ansi(u(setr,msgcolor,u(gconfig,u(firstof,%1,%#),ALERT_FRAME)),[chr(91)])[ansi(u(gconfig,u(firstof,%1,%#),ALERT_TEXT),ucstr(%0))][ansi(%q<msgcolor>,[chr(93)])])
+&msg`header [u(Cobj,bbk)]=localize(ansi(u(setr,msgcolor,u(gconfig,u(firstof,%1,%#),ALERT_FRAME)),[chr(91)])[ansi(u(gconfig,u(firstof,%1,%#),ALERT_TEXT),ucstr(first(%q<subsys>,%0)))][ansi(%q<msgcolor>,[chr(93)])])
 &msg`chan [u(cobj,bbk)]=@check [gtm([u(gconfig,%#,SYSTEMS)],COMSYS,|)];
 
 
@@ -58,6 +58,7 @@
 &start`function`getid [u(cobj,start)]=@function/privileged getid=[u(cobj,bbk)]/getid
 &start`function`hasaccount [u(cobj,start)]=@function/privileged hasaccount=[u(cobj,bbk)]/hasaccount
 &start`function`pages [u(Cobj,start)]=@function/privileged pages=[u(cobj,bbk)]/get_pages
+&start`function`mname [u(Cobj,start)]=@function/privileged mname=[u(cobj,bbk)]/mname
 &start`run`vt [u(Cobj,start)]=@VT [u(Cobj,bbk)]=[u(firstof,[u([u(cobj,gcs)]/config`system_attribute`custom)],[u([u(cobj,gcs)]/config`system_attribute`default)])]
 &start`config`04 [u(Cobj,start)]=@admin function_recursion_limit=100
 &start`config`03 [u(Cobj,start)]=@admin penn_setq=yes
@@ -80,6 +81,8 @@
 &strfirstof bbk=[ofparse(5,,%0,%1,%2,%3,%4,%5,%6,%7,%8,%9)]
 
 &firstof bbk=[ofparse(1,%0,%1,%2,%3,%4,%5,%6,%7,%8,%9)]
+
+&mname bbk=[cname(%0)]
 
 &CAPs bbk=regeditalli(lcstr(%0),v(REG`CAPNAMES),capstr($1),v(REG`CAPNAMES3),lcstr($0),v(REG`CAPNAMES2),$1[capstr($2)])
 &REG`CAPNAMES bbk=(?:^|(?<=[_\/\-\|\s()\+]))([a-z]+)

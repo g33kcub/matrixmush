@@ -1,4 +1,11 @@
-&hlp`who [u(cobj,locations)]=
-&hlp`where [u(cobj,locations)]=
-&hlp`maps [u(cobj,locations)]=
-&shlp`areas [u(cobj,area)]=
+&hlp`who [u(cobj,locations)]=[ansi([u(gconfig,%#,line_accent)],Commands)]:%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+who)] - This lists all the players that you have access to see that are online.)]
+&hlp`where [u(cobj,locations)]=[ansi([u(gconfig,%#,line_accent)],Commands)]:%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+where)] - This lists all the players online sorted by which location they are at. If the player or room is unfindable, they are listed separately.)]
+&hlp`maps [u(cobj,locations)]=Coming Soon.
+&hlp`areas [u(cobj,area)]=[ansi([u(gconfig,%#,line_accent)],Commands)]:%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+areas)] - Lists all the areas in the system.)]%R%R[ansi([u(gconfig,%#,line_accent)],Builder Commands)]:%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+area/add <dbref>)] - Adds the room you are currently in to the area provided.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+area/remove)] - Removes the room you are currently in from its current area.)]%R%R%TThe system references the DBREF of the area because it allows for multiple areas of the same name to be created as sub-areas. So you could have "The Beach" under three different Parent areas.
+&shlp`areas [u(cobj,area)]=[ansi([u(gconfig,%#,line_accent)],Commands)]:%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+area/create <name>)] - Creates an Overworld area.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+area/createsub <parent area>=<name>)] - Creates a sub area under the parent dbref.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+area/ic <dbref>)] - This toggles whether an area is IC or OOC. This only needs to be set at the highest parent level, because it is inherited by sub areas.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+area/color <DBREF>=<color>)] - Sets the color of the area.)]%R[align(10 [sub([u(gconfig,%#,width)],11)],,[ansi([u(gconfig,%#,line_text)],+area/destroy <dbref>)] - Destroys an area only if there are no sub-areas associated with it.)]%R%R%TThe system references the DBREF of the area because it allows for multiple areas of the same name to be created as sub-areas. So you could have "The Beach" under three different Parent areas.
+
++help/add Community/+who=[u(cobj,locations)]/hlp`who
++help/add Community/+where=[u(cobj,locations)]/hlp`where
++help/add Navigation/+map=[u(cobj,locations)]/hlp`maps
++help/add Technical/+areas=[u(cobj,area)]/hlp`areas
++shelp/add Building/+areas=[u(cobj,area)]/shlp`areas

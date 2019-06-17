@@ -16,7 +16,7 @@
 @@ [u(get_config,DBREF,CONFIG)]
 
 &get_config [u(Cobj,core)]=[u([u(cobj,core)]/get_config`[if(gtm(LIST|TYPE|TYPES|PLIST|PTYPE|PTYPES,%0,|),%0,def)],%0,%1,%2,%3,%4,%5,%6,%7,%8,%9)]
-&get_config`def [u(cobj,core)]=[firstof([get([u(get_id,%0,%1)]/config`%1`custom)],[get([u(cobj,gcs)]/config`%1`custom)],[get([u(cobj,gcs)]/config`%1`default)])]
+&get_config`def [u(cobj,core)]=[strfirstof([get([u(get_id,%0,%1)]/config`%1`custom)],[get([u(cobj,gcs)]/config`%1`custom)],[get([u(cobj,gcs)]/config`%1`default)])]
 
 &get_config`list [u(cobj,core)]=[setunion([iter(lattr([u(cobj,bbk)]/install`*,,,,,1),[get([get([u(cobj,bbk)]/##)]/system`configs)])],[get([u(cobj,gcs)]/system`configs)])]
 &get_config`type [u(Cobj,core)]=[sort([iter([u(get_config`list)],[if(gtm([get([u(cobj,gcs)]/config`##`type)],%1,|),##)])])]
