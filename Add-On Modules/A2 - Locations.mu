@@ -159,10 +159,14 @@ th [u(newconfig,USE_AREA_MAPS,LOCATIONS,Locations,0,BOOL,Does your game support 
 &switches`map`player [u(cobj,locations)]=
 &switches`map`admin [u(cobj,locations)]=ADD|REMOVE|INIT
 
+@@ 0 = Area / 1 = Map DB
+&run`map`add [u(Cobj,locations)]=@attach [u(cobj,area)]/run`checkarea=%0,1;@attach %!/run`get_db=[if(isdbref(%1),name(%1),%1)];&%VT`MAPDB %q<a1>=%q<modb>;@attach %!/msg`chan={[setr(msg,'[name(%q<modb>)]' added to area '[cname(%q<a1>)]')]};@attach %!/msg={%q<msg>}
+
 &run`map`init [u(cobj,locations)]=@check [isdbref(%0)]={@attach %!/msg`error={You must use the DBREF of the object you want to setup as a map.}};@check [not([gtm([parent(%0)],[u(Cobjdb,mpo)])])]={@attach %!/msg`error={'[cname(%0)]' is already setup as a map object.}};@parent %0=[u(cobj,mpo)];@attach %!/msg={You have added the '[cname(%0)]' as a map object.}
 
+&run`get_mapdb [u(Cobj,locations)]=th [setq(ml,[children([u(cobj,mpo)])])][setq(mln,[iter(%q<ml>,name(##),%B,|)])][setq(modb,[extract(%q<ml>,match(%q<mln>,%0,|),1)])];@check [isdbref(%q<modb>)]={@attach %!/msg`error={'%0' is not a valid map.}}
 
-&run`map`main [u(cobj,locations)]=@check [gte(strlen(%0),1)]={@check [u(gconfig,%#,USE_AREA_MAPS)]={@attach %!/display`map=MASTER};@attach %!/display`map=[area(%L)]};@attach %!/run`get_mapdb=%0;@attach %!/draw`map=%q<mdb>
+&run`map`main [u(cobj,locations)]=@check [gte(strlen(%0),1)]={@check [u(gconfig,%#,USE_AREA_MAPS)]={@attach %!/display`map=MASTER};@attach %!/display`map=[area(%L)]};@attach %!/run`get_mapdb=%0;@attach %!/draw`map=%q<modb>
 
 &display`map [u(cobj,locations)]=@attach %!/display`map`[firstof(%0,DEFAULT)]
 &display`map`master [u(Cobj,locations)]=@check [isdbref([setr(mm,[u(gconfig,%#,MASTER_MAP)])])]={@attach %!/msg`error={There is no master map object assigned to the system.}};@attach %!/draw`map=%q<mm>,%#
