@@ -160,6 +160,8 @@ th [u(newconfig,USE_AREA_MAPS,LOCATIONS,Locations,0,BOOL,Does your game support 
 &switches`map`admin [u(cobj,locations)]=ADD|REMOVE|INIT
 
 @@ 0 = Area / 1 = Map DB
+&run`map`remove [u(Cobj,locations)]=@attach [u(cobj,area)]/run`checkarea=%0,1;&%vt`mapdb %q<a1>;@attach %!/msg`chan={[setr(msg,Map DB removed from area '[cname(%q<a1>)]')]};@attach %!/msg={%q<msg>}
+
 &run`map`add [u(Cobj,locations)]=@attach [u(cobj,area)]/run`checkarea=%0,1;@attach %!/run`get_db=[if(isdbref(%1),name(%1),%1)];&%VT`MAPDB %q<a1>=%q<modb>;@attach %!/msg`chan={[setr(msg,'[name(%q<modb>)]' added to area '[cname(%q<a1>)]')]};@attach %!/msg={%q<msg>}
 
 &run`map`init [u(cobj,locations)]=@check [isdbref(%0)]={@attach %!/msg`error={You must use the DBREF of the object you want to setup as a map.}};@check [not([gtm([parent(%0)],[u(Cobjdb,mpo)])])]={@attach %!/msg`error={'[cname(%0)]' is already setup as a map object.}};@parent %0=[u(cobj,mpo)];@attach %!/msg={You have added the '[cname(%0)]' as a map object.}

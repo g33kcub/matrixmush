@@ -19,7 +19,7 @@
 &msg`error [u(cobj,bbk)]=@pemit/list u(strfirstof,%1,%#)=udefault(%!/MSG`fmt`error,%0,##,%0,%1,u(SYSTEM`NAME))
 &msg`fmt [u(cobj,bbk)]=u(msg`header,%3,%0) %1
 &msg`fmt`error [u(cobj,bbk)]=u(msg`header,%3,%0) [ansi(+red,ERROR)]: %1
-&msg`header [u(Cobj,bbk)]=localize(ansi(u(setr,msgcolor,u(gconfig,u(firstof,%1,%#),ALERT_FRAME)),[chr(91)])[ansi(u(gconfig,u(firstof,%1,%#),ALERT_TEXT),ucstr(first(%q<subsys>,%0)))][ansi(%q<msgcolor>,[chr(93)])])
+&msg`header [u(Cobj,bbk)]=localize(ansi(u(setr,msgcolor,u(gconfig,u(firstof,%1,%#),ALERT_FRAME)),[chr(91)])[ansi(u(gconfig,u(firstof,%1,%#),ALERT_TEXT),ucstr(strfirstof(%q<subsys>,%0)))][ansi(%q<msgcolor>,[chr(93)])])
 &msg`chan [u(cobj,bbk)]=@check [gtm([u(gconfig,%#,SYSTEMS)],COMSYS,|)];
 
 
